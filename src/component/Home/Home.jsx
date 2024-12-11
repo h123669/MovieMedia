@@ -3,7 +3,7 @@ import './Home.module.css'
 import { Helmet } from 'react-helmet';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { WatchlistContext, WatchlistProvider } from '../../Context/Add-to-list';
+import { WatchlistContext } from '../../Context/Add-to-list';
 import toast from './../../../node_modules/react-hot-toast/src/index';
 
 
@@ -11,6 +11,7 @@ export default function Home() {
   let {addTOWatchlist}=useContext(WatchlistContext)
 let [movie,setMovie]=useState([])
 let [Search,setSearch]=useState([])
+const [favorites, setFavorites] = useState(new Set());
 function getMovie() {
   const options = {
     method: 'GET',
@@ -25,6 +26,7 @@ function getMovie() {
     .then(res =>{
       setMovie(res.results)
       setSearch(res.results)
+      
     
     }
 
@@ -34,13 +36,15 @@ function getMovie() {
 
 async function addList(id){
   let res =await addTOWatchlist(id)
-  console.log(res);
 
     
 if(res.success==true){
   toast.success('Successfully add!')
+  setFavorites(prev => new Set(prev).add(id));
+  getMovie()
 }else{
   toast.success("Failed to add")
+  getMovie()
 }
 
 }
@@ -93,7 +97,9 @@ getMovie()
                   <button className=" p-2 " onClick={()=>{
                     addList(movie.id)
                   }}>
-                    <i className="bg-red-600 p-2 text-white rounded-full fa-regular fa-heart"></i>
+                    <i className={` p-2 text-white rounded-full fa-regular fa-heart ${favorites.has(movie.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
+
+
                   </button>
                 </div>
               </div>

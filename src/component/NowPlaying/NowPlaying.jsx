@@ -8,6 +8,7 @@ import toast from './../../../node_modules/react-hot-toast/src/index';
 
 export default function NowPlaying() {
   let {addTOWatchlist}=useContext(WatchlistContext)
+  const [favorites, setFavorites] = useState(new Set());
 
   let[list,setList]=useState([])
   function Nowplayine() {
@@ -37,6 +38,8 @@ export default function NowPlaying() {
       
   if(res.success==true){
     toast.success('Successfully add!')
+    setFavorites(prev => new Set(prev).add(id));
+
   }else{
     toast.success("Failed to add")
   }
@@ -72,8 +75,8 @@ export default function NowPlaying() {
                   <button className=" p-2 " onClick={()=>{
                     addList(movie.id)
                   }}>
-                    <i className="bg-red-600 p-2 text-white rounded-full fa-regular fa-heart"></i>
-                  </button>
+                    <i className={` p-2 text-white rounded-full fa-regular fa-heart ${favorites.has(movie.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
+                    </button>
                 </div>
               </div>
           ))}

@@ -1,6 +1,7 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
 export let WatchlistContext =createContext("")
+
 export function WatchlistProvider({children}) {
     function addTOWatchlist(id) {
         const options = {
@@ -22,7 +23,9 @@ export function WatchlistProvider({children}) {
             .then(res => res.json())
             .then(res => res)
             .catch(err =>err);
-    }
+        }
+        
+
 
     function getWashList() {
         const options = {

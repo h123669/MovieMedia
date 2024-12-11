@@ -30,12 +30,15 @@ let x= createBrowserRouter([
 
   return (
     <>
+    
   <WatchlistProvider>
   <RouterProvider router={x}>
   </RouterProvider>
     <Toaster></Toaster>
 
   </WatchlistProvider>
+
+    
     </>
   )
 }

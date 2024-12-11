@@ -6,6 +6,8 @@ import { WatchlistContext } from '../../Context/Add-to-list';
 
 
 export default function MovieDetails() {
+  const [favorites, setFavorites] = useState(new Set());
+
   let {addTOWatchlist}=useContext(WatchlistContext)
   async function addList(id){
     let res =await addTOWatchlist(id)
@@ -29,6 +31,8 @@ export default function MovieDetails() {
       
   if(res.success==true){
     toast.success('Successfully add!')
+    setFavorites(prev => new Set(prev).add(id));
+
   }else{
     toast.success("Failed to add")
   }
@@ -85,8 +89,8 @@ export default function MovieDetails() {
                   <button className=" p-2 " onClick={()=>{
                     addList(details.id)
                   }}>
-                    <i className="bg-red-600 p-2 text-white rounded-full fa-regular fa-heart"></i>
-                  </button>
+                    <i className={` p-2 text-white rounded-full fa-regular fa-heart ${favorites.has(details.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
+                    </button>
                 </div>
 
 
