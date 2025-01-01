@@ -65,9 +65,9 @@ export default function WatchList() {
           <tr className="bg-white flex justify-between border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={watch.id}>
             <Link to={`../movieDetails/${watch.id}`} key={list.id}>
         <td className="px-16 py-3">
-          <img src=  {`https://image.tmdb.org/t/p/w500${watch.backdrop_path}`}  className="w-16 md:w-32 max-w-full max-h-full" alt="Apple Watch" />
+          <img src=  {`https://image.tmdb.org/t/p/w500${watch.backdrop_path}`}  className="w-32 md:w-64 max-w-full max-h-full" alt="Apple Watch" />
         </td>
-        <td className="px-6 py-3 font-semibold text-gray-900 dark:text-white">
+        <td className="px-6 py-3 font-semibold text-gray-900 dark:text-white ">
           {watch.title}
         </td>
       
