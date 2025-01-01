@@ -3,6 +3,8 @@ import { createContext, useState } from "react";
 export let WatchlistContext =createContext("")
 
 export function WatchlistProvider({children}) {
+    const [favorites, setFavorites] = useState(new Set());
+
     function addTOWatchlist(id) {
         const options = {
             method: 'POST',
@@ -20,8 +22,14 @@ export function WatchlistProvider({children}) {
         };
         
         return fetch('https://api.themoviedb.org/3/account/21588316/watchlist', options)
-            .then(res => res.json())
-            .then(res => res)
+            .then(res => res.json()
+        )
+            .then(res =>{ 
+                if (res.success) {
+                    setFavorites((prev) => new Set(prev).add(id));
+                  }
+                  return res;
+                })
             .catch(err =>err);
         }
         
@@ -59,13 +67,22 @@ export function WatchlistProvider({children}) {
         
         return fetch('https://api.themoviedb.org/3/account/21588316/watchlist', options)
             .then(res => res.json())
-            .then(res => res)
+            .then(res =>{
+                if (res.success) {
+                    setFavorites((prev) => {
+                      const updatedFavorites = new Set(prev);
+                      updatedFavorites.delete(id); 
+                      return updatedFavorites;
+                    });
+                  }
+                  return res;
+            })
             .catch(err =>err);
     }
 
 
     return(
-        <WatchlistContext.Provider value={{addTOWatchlist,getWashList,DeleteWatchlist}}>
+        <WatchlistContext.Provider value={{addTOWatchlist,getWashList,DeleteWatchlist,favorites, setFavorites}}>
             {children}
         </WatchlistContext.Provider>
     )

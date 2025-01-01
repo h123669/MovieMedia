@@ -6,16 +6,15 @@ import { WatchlistContext } from '../../Context/Add-to-list';
 
 
 export default function MovieDetails() {
-  const [favorites, setFavorites] = useState(new Set());
 
-  let {addTOWatchlist}=useContext(WatchlistContext)
+  let {addTOWatchlist,favorites, setFavorites}=useContext(WatchlistContext)
   async function addList(id){
     let res =await addTOWatchlist(id)
-    console.log(res);
   
       
   if(res.success==true){
     toast.success('Successfully add!')
+    setFavorites(prev => new Set(prev).add(id));
   }else{
     toast.success("Failed to add")
   }
@@ -24,20 +23,9 @@ export default function MovieDetails() {
 
   let {id}=useParams()
   let [details,setdetails]=useState("")
-  async function addList(id){
-    let res =await addTOWatchlist(id)
-    console.log(res);
-  
-      
-  if(res.success==true){
-    toast.success('Successfully add!')
-    setFavorites(prev => new Set(prev).add(id));
 
-  }else{
-    toast.success("Failed to add")
-  }
+
   
-  }
   
   
   function getDetails() {
@@ -58,7 +46,7 @@ export default function MovieDetails() {
   }
   useEffect(()=>{
     getDetails()
-  })
+  },[])
   return (
     <>
     <div className='flex flex-wrap w-[90%] m-auto overflow-hidden sm:flex-col lg:flex-row xl:flex-row md:flex-row'>
@@ -89,7 +77,7 @@ export default function MovieDetails() {
                   <button className=" p-2 " onClick={()=>{
                     addList(details.id)
                   }}>
-                    <i className={` p-2 text-white rounded-full fa-regular fa-heart ${favorites.has(details.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
+                    <i className={` p-2 text-white rounded-full fa-regular fa-heart ${favorites?.has(details.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
                     </button>
                 </div>
 

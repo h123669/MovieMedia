@@ -4,11 +4,11 @@ import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { WatchlistContext } from '../../Context/Add-to-list'
 import toast from './../../../node_modules/react-hot-toast/src/index';
+import { MagicSpinner } from 'react-spinners-kit'
 
 
 export default function NowPlaying() {
-  let {addTOWatchlist}=useContext(WatchlistContext)
-  const [favorites, setFavorites] = useState(new Set());
+  let {addTOWatchlist,favorites, setFavorites}=useContext(WatchlistContext)
 
   let[list,setList]=useState([])
   function Nowplayine() {
@@ -27,6 +27,7 @@ export default function NowPlaying() {
       .then(json => {
         console.log(json.results);
         setList(json.results)
+
         
       })
       .catch(err => console.error(err));
@@ -34,17 +35,13 @@ export default function NowPlaying() {
   async function addList(id){
     let res =await addTOWatchlist(id)
     console.log(res);
-  
-      
+
   if(res.success==true){
     toast.success('Successfully add!')
     setFavorites(prev => new Set(prev).add(id));
-
   }else{
     toast.success("Failed to add")
-  }
-  
-  }
+  }  }
 
     useEffect(()=>{
       Nowplayine()
@@ -75,7 +72,7 @@ export default function NowPlaying() {
                   <button className=" p-2 " onClick={()=>{
                     addList(movie.id)
                   }}>
-                    <i className={` p-2 text-white rounded-full fa-regular fa-heart ${favorites.has(movie.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
+                    <i className={` p-2 text-white rounded-full fa-regular fa-heart ${favorites?.has(movie.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
                     </button>
                 </div>
               </div>

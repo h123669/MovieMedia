@@ -8,11 +8,12 @@ import toast from './../../../node_modules/react-hot-toast/src/index';
 
 
 export default function Home() {
-  let {addTOWatchlist}=useContext(WatchlistContext)
+  let {addTOWatchlist,favorites, setFavorites,getWashList}=useContext(WatchlistContext)
 let [movie,setMovie]=useState([])
 let [Search,setSearch]=useState([])
-const [favorites, setFavorites] = useState(new Set());
-function getMovie() {
+  let[list,setList]=useState([])
+
+function getMovies() {
   const options = {
     method: 'GET',
     headers: {
@@ -35,18 +36,25 @@ function getMovie() {
 }
 
 async function addList(id){
-  let res =await addTOWatchlist(id)
+    let res =await addTOWatchlist(id)
+    console.log(res);
 
-    
-if(res.success==true){
-  toast.success('Successfully add!')
-  setFavorites(prev => new Set(prev).add(id));
-  getMovie()
-}else{
-  toast.success("Failed to add")
-  getMovie()
+  if(res.success==true){
+    toast.success('Successfully add!')
+    setFavorites(prev => new Set(prev).add(id));
+  }else{
+    toast.error("Failed to add")
+  } 
+
 }
+async function getmovie() {
+  let res = await getWashList()
+  setList(res.results)    
+  getmovie();
 
+  const movieIds = res.results.map((movie) => movie.id);
+  setFavorites(new Set(movieIds));
+  
 }
 
 
@@ -66,7 +74,8 @@ function searchMovie(e) {
 }
   
     useEffect(()=>{
-getMovie()
+getMovies()
+getmovie()
     },[])
   return (
     
@@ -94,13 +103,10 @@ getMovie()
                   </Link>
                 <div className="flex justify-around items-center">
                   <span>{new Date(movie.release_date).toDateString()}</span>
-                  <button className=" p-2 " onClick={()=>{
-                    addList(movie.id)
-                  }}>
-                    <i className={` p-2 text-white rounded-full fa-regular fa-heart ${favorites.has(movie.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
+                  <button className="p-2" onClick={() => addList(movie.id)}>
+  <i className={`p-2 text-white rounded-full fa-regular fa-heart ${favorites.has(movie.id) ? 'bg-red-600' : 'bg-gray-400'}`}></i>
+</button>
 
-
-                  </button>
                 </div>
               </div>
           ))}
