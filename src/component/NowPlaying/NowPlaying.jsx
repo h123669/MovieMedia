@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { WatchlistContext } from '../../Context/Add-to-list'
 import toast from './../../../node_modules/react-hot-toast/src/index';
-import { MagicSpinner } from 'react-spinners-kit'
 
 
 export default function NowPlaying() {
